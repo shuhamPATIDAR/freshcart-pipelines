@@ -1,0 +1,50 @@
+name: iris_classifier_pipeline
+type: python
+uuid: iris_classifier_pipeline
+blocks:
+  - uuid: load_iris
+    type: data_loader
+    status: executed
+    language: python
+    downstream_blocks:
+      - prepare_data
+    upstream_blocks: []
+  - uuid: prepare_data
+    type: transformer
+    status: executed
+    language: python
+    downstream_blocks:
+      - train_model
+    upstream_blocks:
+      - load_iris
+  - uuid: train_model
+    type: transformer
+    status: executed
+    language: python
+    downstream_blocks:
+      - save_results
+      - evaluate_model
+    upstream_blocks:
+      - prepare_data
+  - uuid: save_results
+    type: data_exporter
+    status: executed
+    language: python
+    downstream_blocks: []
+    upstream_blocks:
+      - train_model
+  - uuid: evaluate_model
+    type: transformer
+    status: executed
+    language: python
+    downstream_blocks:
+      - export_metrics
+    upstream_blocks:
+      - train_model
+  - uuid: export_metrics
+    type: data_exporter
+    status: executed
+    language: python
+    downstream_blocks: []
+    upstream_blocks:
+      - evaluate_model
